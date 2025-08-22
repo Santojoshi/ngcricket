@@ -61,10 +61,7 @@
                                     
                                 <tr>
                                     <td>
-                                        <button type="button" class="remove-tr-btn flex-align gap-12 hover-text-danger-600">
-                                            <i class="ph ph-x-circle text-2xl d-flex"></i>
-                                            Remove
-                                        </button>
+                                         <a href="{{ route('cart.remove', $item->id) }}" class="btn btn-danger btn-sm">Remove</a>
                                     </td>
                                     <td>
                                         <div class="table-product d-flex align-items-center gap-24">
@@ -81,21 +78,26 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="text-lg h6 mb-0 fw-semibold">$125.00</span>
+                                        <span class="text-lg h6 mb-0 fw-semibold">${{ number_format($item->price, 2) }}</span>
                                     </td>
                                     <td>
                                         <div class="d-flex rounded-4 overflow-hidden">
-                                            <button type="button" class="quantity__minus border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white">
+                                            <button type="button" class="update-cart border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white"
+                                            data-id="{{ $item->id }}"
+                                            data-action="decrease">
                                                 <i class="ph ph-minus"></i>
                                             </button>
-                                            <input type="number" class="quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4" value="1" min="1">
-                                            <button type="button" class="quantity__plus border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white">
+                                            <!-- <input type="number" class=" qty-{{ $item->id }} quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4" value="{{ $item->quantity }}" min="1"> -->
+                                             <span class="qty-{{ $item->id }} flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4 pt-5">{{ $item->quantity }}</span>
+                                            <button type="button" class="update-cart border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white"
+                                                data-id="{{ $item->id }}"
+                                            data-action="increase">
                                                 <i class="ph ph-plus"></i>
                                             </button>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="text-lg h6 mb-0 fw-semibold">$125.00</span>
+                                        $<span class="item-total-{{ $item->id }}">{{ $item->getPriceSum() }}</span>
                                     </td>
                                 </tr>
                        @endforeach
@@ -194,4 +196,28 @@
 
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).on('click', '.update-cart', function(e) {
+    e.preventDefault();
+    let id = $(this).data('id');
+    let action = $(this).data('action');
+
+    $.ajax({
+        url: "{{ route('cart.update', '') }}/" + id,
+        method: "POST",
+        data: {
+            _token: "{{ csrf_token() }}",
+            action: action
+        },
+        success: function(res) {
+            if(res.success) {
+                $('.qty-' + id).text(res.quantity);
+                $('.item-total-' + id).text(res.itemTotal);
+                $('#cart-total').text(res.cartTotal);
+            }
+        }
+    });
+});
+</script>
 @endsection
