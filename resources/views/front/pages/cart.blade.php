@@ -43,11 +43,12 @@
                         <table class="table style-three">
                             <thead>
                                 <tr>
-                                    <th class="h6 mb-0 text-lg fw-bold">Delete</th>
+                                    
                                     <th class="h6 mb-0 text-lg fw-bold">Product Name</th>
                                     <th class="h6 mb-0 text-lg fw-bold">Price</th>
                                     <th class="h6 mb-0 text-lg fw-bold">Quantity</th>
                                     <th class="h6 mb-0 text-lg fw-bold">Subtotal</th>
+                                    <th class="h6 mb-0 text-lg fw-bold">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -60,9 +61,7 @@
                                 
                                     
                                 <tr>
-                                    <td>
-                                         <a href="{{ route('cart.remove', $item->id) }}" class="btn btn-danger btn-sm">Remove</a>
-                                    </td>
+                                   
                                     <td>
                                         <div class="table-product d-flex align-items-center gap-24">
                                            <a href="product-details-two.html" class="table-product__thumb border border-gray-100 rounded-8 flex-center ">
@@ -88,7 +87,7 @@
                                                 <i class="ph ph-minus"></i>
                                             </button>
                                             <!-- <input type="number" class=" qty-{{ $item->id }} quantity__input flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4" value="{{ $item->quantity }}" min="1"> -->
-                                             <span class="qty-{{ $item->id }} flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4 pt-5">{{ $item->quantity }}</span>
+                                             <span class="qty-{{ $item->id }} flex-grow-1 border border-gray-100 border-start-0 border-end-0 text-center w-32 px-4 pt-10">{{ $item->quantity }}</span>
                                             <button type="button" class="update-cart border border-end border-gray-100 flex-shrink-0 h-48 w-48 text-neutral-600 flex-center hover-bg-main-600 hover-text-white"
                                                 data-id="{{ $item->id }}"
                                             data-action="increase">
@@ -98,6 +97,9 @@
                                     </td>
                                     <td>
                                         $<span class="item-total-{{ $item->id }}">{{ $item->getPriceSum() }}</span>
+                                    </td>
+                                     <td>
+                                         <a href="{{ route('cart.remove', $item->id) }}" class="btn btn-danger btn-sm">X</a>
                                     </td>
                                 </tr>
                        @endforeach
@@ -111,7 +113,7 @@
                             <input type="text" class="common-input" placeholder="Coupon Code">
                             <button type="submit" class="btn btn-main py-18 w-100 rounded-8">Apply Coupon</button>
                         </div>
-                        <button type="submit" class="text-lg text-gray-500 hover-text-main-600">Update Cart</button>
+                        <!-- <button type="submit" class="text-lg text-gray-500 hover-text-main-600">Update Cart</button> -->
                     </div>
                 </div>
             </div>
@@ -121,7 +123,7 @@
                     <div class="bg-color-three rounded-8 p-24">
                         <div class="mb-32 flex-between gap-8">
                             <span class="text-gray-900 font-heading-two">Subtotal</span>
-                            <span class="text-gray-900 fw-semibold">$250.00</span>
+                            <span class="text-gray-900 fw-semibold">$<span class="cart-total">{{ Cart::getTotal() }}</span></span>
                         </div>
                         <div class="mb-32 flex-between gap-8">
                             <span class="text-gray-900 font-heading-two">Extimated Delivery</span>
@@ -129,13 +131,13 @@
                         </div>
                         <div class="mb-0 flex-between gap-8">
                             <span class="text-gray-900 font-heading-two">Extimated Taxs</span>
-                            <span class="text-gray-900 fw-semibold">USD 10.00</span>
+                            <span class="text-gray-900 fw-semibold">$ 00.00</span>
                         </div>
                     </div>  
                     <div class="bg-color-three rounded-8 p-24 mt-24">
                         <div class="flex-between gap-8">
                             <span class="text-gray-900 text-xl fw-semibold">Total</span>
-                            <span class="text-gray-900 text-xl fw-semibold">$250.00</span>
+                            <span class="text-gray-900 text-xl fw-semibold">$<span class="cart-total">{{ Cart::getTotal()}}</span></span>
                         </div>
                     </div>  
                     <a href="checkout.html" class="btn btn-main mt-40 py-18 w-100 rounded-8">Proceed to checkout</a>
@@ -214,7 +216,7 @@ $(document).on('click', '.update-cart', function(e) {
             if(res.success) {
                 $('.qty-' + id).text(res.quantity);
                 $('.item-total-' + id).text(res.itemTotal);
-                $('#cart-total').text(res.cartTotal);
+                $('.cart-total').text(res.cartTotal);
             }
         }
     });
