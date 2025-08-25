@@ -1,9 +1,10 @@
-@extends('layouts.app')
+@extends('front.app')
 
-@section('content')
+@section('frontcontent')
 <div class="container">
   <h3 class="mb-3">Your Cart</h3>
 
+  {{-- Flash messages --}}
   @if(session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif
   @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
 
@@ -34,10 +35,7 @@
             <td>₹{{ number_format($item->price,2) }}</td>
             <td class="line-total">₹{{ number_format($item->price * $item->quantity,2) }}</td>
             <td>
-              <form method="POST" action="{{ route('cart.remove',$item->id) }}">
-                @csrf @method('DELETE')
-                <button class="btn btn-sm btn-link text-danger">Remove</button>
-              </form>
+              <button type="button" class="btn btn-sm btn-link text-danger btn-remove">Remove</button>
             </td>
           </tr>
         @endforeach
@@ -81,14 +79,11 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane fade show active" id="tab-login" role="tabpanel">
-            <form id="loginForm">
-              @csrf
-              <div class="mb-3">
-                <label class="form-label">Email</label>
+            <form id="loginForm">@csrf
+              <div class="mb-3"><label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" required>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Password</label>
+              <div class="mb-3"><label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" required>
               </div>
               <div class="mb-3 form-check">
@@ -101,22 +96,17 @@
           </div>
 
           <div class="tab-pane fade" id="tab-register" role="tabpanel">
-            <form id="registerForm">
-              @csrf
-              <div class="mb-3">
-                <label class="form-label">Name</label>
+            <form id="registerForm">@csrf
+              <div class="mb-3"><label class="form-label">Name</label>
                 <input name="name" class="form-control" required>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Email</label>
+              <div class="mb-3"><label class="form-label">Email</label>
                 <input name="email" type="email" class="form-control" required>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Password</label>
+              <div class="mb-3"><label class="form-label">Password</label>
                 <input name="password" type="password" class="form-control" required>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Confirm Password</label>
+              <div class="mb-3"><label class="form-label">Confirm Password</label>
                 <input name="password_confirmation" type="password" class="form-control" required>
               </div>
               <div class="text-danger small" id="registerErrors"></div>
@@ -136,101 +126,76 @@
 
 @push('scripts')
 <script>
-  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const authModal = new bootstrap.Modal(document.getElementById('authModal'));
 
-  // Show modal if guest clicks checkout
-  const btnCheckout = document.getElementById('btnCheckout');
-  if (btnCheckout) {
-    btnCheckout.addEventListener('click', () => authModal.show());
+function showErrors(containerId, errors) {
+  document.getElementById(containerId).innerHTML =
+    Array.isArray(errors) ? errors.join('<br>') : (errors || '');
+}
+
+// Helper: fetch JSON with CSRF
+async function postJSON(url, body, asForm=false) {
+  const opts = {
+    method: 'POST',
+    headers: { 'X-CSRF-TOKEN': token, 'X-Requested-With':'XMLHttpRequest', 'Accept':'application/json' }
+  };
+  opts.body = asForm ? new FormData(body) : JSON.stringify(body);
+  if (!asForm) opts.headers['Content-Type'] = 'application/json';
+
+  const res = await fetch(url, opts);
+  if (res.ok) return {ok:true, data:await res.json().catch(()=>({}))};
+  if (res.status===422) {
+    const data = await res.json();
+    const msgs=[]; for (const k in data.errors) msgs.push(data.errors[k][0]);
+    return {ok:false, errors:msgs};
   }
+  return {ok:false, errors:['Unexpected error']};
+}
 
-  // Helpers
-  function showErrors(containerId, errors) {
-    const el = document.getElementById(containerId);
-    el.innerHTML = Array.isArray(errors) ? errors.join('<br>') : (errors || '');
-  }
+// Guest checkout -> show modal
+const btnCheckout = document.getElementById('btnCheckout');
+if (btnCheckout) btnCheckout.addEventListener('click', ()=>authModal.show());
 
-  async function postJSON(url, form) {
-    const formData = new FormData(form);
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': token,
-        'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/json'
-      },
-      body: formData
-    });
-    if (res.ok) return { ok: true };
-    if (res.status === 422) {
-      const data = await res.json();
-      const msgs = [];
-      for (const k in data.errors) { msgs.push(data.errors[k][0]); }
-      return { ok: false, errors: msgs };
+// Login form
+document.getElementById('loginForm')?.addEventListener('submit', async e=>{
+  e.preventDefault(); showErrors('loginErrors','');
+  const out = await postJSON('{{ route('login') }}', e.target, true);
+  if(out.ok){ window.location='{{ route('checkout.index') }}'; }
+  else showErrors('loginErrors', out.errors);
+});
+
+// Register form
+document.getElementById('registerForm')?.addEventListener('submit', async e=>{
+  e.preventDefault(); showErrors('registerErrors','');
+  const out = await postJSON('{{ route('register') }}', e.target, true);
+  if(out.ok){ window.location='{{ route('checkout.index') }}'; }
+  else showErrors('registerErrors', out.errors);
+});
+
+// Qty update
+document.querySelectorAll('.btn-qty').forEach(btn=>{
+  btn.addEventListener('click', async e=>{
+    const tr=e.target.closest('tr'); const id=tr.dataset.id;
+    const input=tr.querySelector('.qty-input'); let qty=parseInt(input.value||1,10);
+    qty+=parseInt(btn.dataset.delta,10); qty=Math.max(1,qty); input.value=qty;
+
+    const res=await postJSON('{{ url('/cart/update') }}/'+id, {quantity:qty});
+    if(res.ok){
+      const price=parseFloat(tr.children[2].innerText.replace(/[₹,]/g,''));
+      tr.querySelector('.line-total').innerText='₹'+(price*qty).toFixed(2);
+      document.getElementById('cart-grand').innerText='₹'+parseFloat(res.data.total).toFixed(2);
     }
-    const text = await res.text();
-    return { ok: false, errors: [text] };
-  }
-
-  // Login submit (AJAX)
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      showErrors('loginErrors','');
-      const out = await postJSON('{{ route('login') }}', loginForm);
-      if (out.ok) {
-        window.location.href = '{{ route('checkout.index') }}';
-      } else {
-        showErrors('loginErrors', out.errors);
-      }
-    });
-  }
-
-  // Register submit (AJAX)
-  const registerForm = document.getElementById('registerForm');
-  if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      showErrors('registerErrors','');
-      const out = await postJSON('{{ route('register') }}', registerForm);
-      if (out.ok) {
-        window.location.href = '{{ route('checkout.index') }}';
-      } else {
-        showErrors('registerErrors', out.errors);
-      }
-    });
-  }
-
-  // Qty update inline
-  document.querySelectorAll('.btn-qty').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const tr = e.target.closest('tr');
-      const input = tr.querySelector('.qty-input');
-      let qty = parseInt(input.value || '1', 10);
-      qty += parseInt(e.target.dataset.delta,10);
-      qty = Math.max(1, qty);
-      input.value = qty;
-      const id = tr.dataset.id;
-
-      const res = await fetch('{{ url('/cart/update') }}/' + id, {
-        method:'POST',
-        headers:{
-          'X-CSRF-TOKEN': token,
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'application/json',
-          'Content-Type':'application/json'
-        },
-        body: JSON.stringify({ quantity: qty })
-      });
-      const data = await res.json();
-      if (data.ok) {
-        const price = parseFloat(tr.children[2].innerText.replace('₹','').replace(/,/g,''));
-        tr.querySelector('.line-total').innerText = '₹' + (price * qty).toFixed(2);
-        document.getElementById('cart-grand').innerText = '₹' + parseFloat(data.total).toFixed(2);
-      }
-    });
   });
+});
+
+// Remove item
+document.querySelectorAll('.btn-remove').forEach(btn=>{
+  btn.addEventListener('click', async e=>{
+    const tr=e.target.closest('tr'); const id=tr.dataset.id;
+    const res=await postJSON('{{ url('/cart/remove') }}/'+id, {}, false);
+    if(res.ok){ tr.remove(); document.getElementById('cart-grand').innerText='₹'+parseFloat(res.data.total).toFixed(2); }
+  });
+});
 </script>
 @endpush

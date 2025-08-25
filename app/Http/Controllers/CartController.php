@@ -3,73 +3,76 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\ProductModel;
-use Cart;
+
 
 class CartController extends Controller
 {
-    public function index()
+    private function cart()
     {
-        $items = Cart::getContent();
-        return view('front/pages/cart', compact('items'));
+        return Auth::check()
+            ? Cart::session(Auth::id())
+            : Cart::session(session()->getId());
     }
 
-    public function add($id)
+    public function index()
+    {
+        $items = $this->cart()->getContent();
+        $total = $this->cart()->getTotal();
+        return view('front/pages/cart', compact('items','total'));
+    }
+
+    public function add(Request $request, $id)
     {
         $product = ProductModel::findOrFail($id);
 
-        Cart::add([
-            'id' => $product->id,
-            'name' => $product->product_name,
-            'price' => $product->us_price_actual,
-            'quantity' => 1,
-            'attributes' => collect([
-            'image' => $product->img1,
-            ])
+        $this->cart()->add([
+            'id'       => $product->id,
+            'name'     => $product->product_name,
+            'price'    => $product->us_price_actual,
+            'quantity' => (int)($request->input('qty', 1)),
+            'attributes' => [
+                'image' => $product->img1,
+            ],
         ]);
 
-        return redirect()->back()->with('success', 'Product added to cart!');
+        return back()->with('success','Added to cart');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $qty = (int)$request->input('quantity', 1);
+        $this->cart()->update($id, [
+            'quantity' => [
+                'relative' => false,
+                'value'    => max(1, $qty),
+            ],
+        ]);
+
+        return response()->json([
+            'ok'    => true,
+            'total' => $this->cart()->getTotal(),
+        ]);
     }
 
     public function remove($id)
     {
-        Cart::remove($id);
-        return back()->with('success', 'Item removed.');
+        $this->cart()->remove($id);
+        return back();
     }
 
     public function clear()
     {
-        Cart::clear();
-        return back()->with('success', 'Cart cleared.');
+        $this->cart()->clear();
+        return back();
     }
-    public function update(Request $request, $id)
+    public function getCartCount()
 {
-    $action = $request->input('action'); // increase or decrease
+    $cartSession = auth()->check() ? auth()->id() : session()->getId();
+    $count = Cart::session($cartSession)->getTotalQuantity();
 
-    if ($action == 'increase') {
-        Cart::update($id, [
-            'quantity' => +1
-        ]);
-    } elseif ($action == 'decrease') {
-        Cart::update($id, [
-            'quantity' => -1
-        ]);
-    }
-
-    $item = Cart::get($id);
-
-    // If request is AJAX → return JSON
-    if ($request->ajax()) {
-        return response()->json([
-            'success' => true,
-            'quantity' => $item->quantity,
-            'itemTotal' => $item->getPriceSum(),
-            'cartTotal' => Cart::getTotal(),
-        ]);
-    }
-
-    // fallback (normal form submit)
-    return back()->with('success', 'Cart updated successfully!');
+    return response()->json(['count' => $count]);
 }
-
 }

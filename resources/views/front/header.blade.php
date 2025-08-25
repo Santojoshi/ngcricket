@@ -1,6 +1,6 @@
-<?php
+<?php 
+use Illuminate\Support\Facades\Auth;
 $cartCount = Cart::getContent()->count();
-
 ?>
 
 <style>
@@ -12,27 +12,23 @@ $cartCount = Cart::getContent()->count();
 <!--==================== Preloader Start ====================-->
 <div class="preloader">
     <img src="{{url('public/asset/images/icon/loader.gif')}}" alt="">
-  </div>
+</div>
 <!--==================== Preloader End ====================-->
 
 <!--==================== Overlay Start ====================-->
 <div class="overlay"></div>
 <!--==================== Overlay End ====================-->
 
-<!--==================== Sidebar Overlay End ====================-->
 <div class="side-overlay"></div>
-<!--==================== Sidebar Overlay End ====================-->
 
-<!-- ==================== Scroll to Top End Here ==================== -->
 <div class="progress-wrap">
   <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
       <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
   </svg>
 </div>
-<!-- ==================== Scroll to Top End Here ==================== -->
 
 <!-- ==================== Search Box Start Here ==================== -->
- <form action="#" class="search-box">
+<form action="#" class="search-box">
   <button type="button" class="search-box__close position-absolute inset-block-start-0 inset-inline-end-0 m-16 w-48 h-48 border border-gray-100 rounded-circle flex-center text-white hover-text-gray-800 hover-bg-white text-2xl transition-1">
     <i class="ph ph-x"></i>
   </button>
@@ -44,10 +40,10 @@ $cartCount = Cart::getContent()->count();
       </button>
     </div>
   </div>
- </form>
+</form>
 <!-- ==================== Search Box End Here ==================== -->
 
-<!-- ==================== Mobile Menu Start Here ==================== -->
+<!-- ==================== Mobile Menu ==================== -->
 <div class="mobile-menu scroll-sm d-lg-none d-block">
     <button type="button" class="close-button"> <i class="ph ph-x"></i> </button>
     <div class="mobile-menu__inner">
@@ -55,340 +51,147 @@ $cartCount = Cart::getContent()->count();
             <img src="{{url('public/asset/images/logo/nglogo.jpg')}}" alt="Logo">
         </a>
         <div class="mobile-menu__menu">
-            <!-- Nav Menu Start -->
-<ul class="nav-menu flex-align nav-menu--mobile">
-    <li class="on-hover-item nav-menu__item has-submenu activePage">
-        <a href="javascript:void(0)" class="nav-menu__link">Home</a>
-        
-    </li>
-    <li class="on-hover-item nav-menu__item has-submenu">
-        <a href="javascript:void(0)" class="nav-menu__link">Shop</a>
-         
-    </li>
-    <li class="on-hover-item nav-menu__item has-submenu">
-        <a href="{{url('/about')}}" class="nav-menu__link">About Us</a>
-         <ul class="on-hover-dropdown common-dropdown nav-submenu scroll-sm">
-            <li class="common-dropdown__item nav-submenu__item">
-                <a href="blog.html" class="common-dropdown__link nav-submenu__link hover-bg-neutral-100"> Blog</a>
-            </li>
-            <li class="common-dropdown__item nav-submenu__item">
-                <a href="blog-details.html" class="common-dropdown__link nav-submenu__link hover-bg-neutral-100"> Blog Details</a>
-            </li>
-        </ul>
-    </li>
-    <li class="nav-menu__item">
-        <a href="{{url('/contact')}}" class="nav-menu__link">Contact Us</a>
-    </li>
-</ul>
-<!-- Nav Menu End -->
+            <ul class="nav-menu flex-align nav-menu--mobile">
+                <li class="nav-menu__item activePage"><a href="{{url('/')}}" class="nav-menu__link">Home</a></li>
+                <li class="nav-menu__item"><a href="javascript:void(0)" class="nav-menu__link">Shop</a></li>
+                <li class="nav-menu__item"><a href="{{url('/about')}}" class="nav-menu__link">About Us</a></li>
+                <li class="nav-menu__item"><a href="{{url('/contact')}}" class="nav-menu__link">Contact Us</a></li>
+            </ul>
         </div>
     </div>
 </div>
-<!-- ==================== Mobile Menu End Here ==================== -->
 
-
-    <!-- ======================= Middle Top Start ========================= -->
+<!-- ======================= Top Header ========================= -->
 <div class="header-top bg-main-600 flex-between">
     <div class="container container-lg">
         <div class="flex-between flex-wrap gap-8">
             <ul class="flex-align flex-wrap d-none d-md-flex">
-                <li class="border-right-item"><a href="#shipping" class="text-white text-sm hover-text-decoration-underline">About us</a></li>
-                <li class="border-right-item"><a href="#shipping" class="text-white text-sm hover-text-decoration-underline">Returns Policy</a></li>
+                <li class="border-right-item"><a href="{{url('/about')}}" class="text-white text-sm hover-text-decoration-underline">About us</a></li>
+                <li class="border-right-item"><a href="#" class="text-white text-sm hover-text-decoration-underline">Returns Policy</a></li>
             </ul>
-        <ul class="header-top__right flex-align flex-wrap">
-                
-                <li class="on-hover-item border-right-item border-right-item-sm-space has-submenu arrow-white">
-                    <a href="javascript:void(0)" class="selected-text text-white text-sm py-8">Eng</a>
-                    <ul class="selectable-text-list on-hover-dropdown common-dropdown common-dropdown--sm max-h-200 scroll-sm px-0 py-8">
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag1.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                English
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag2.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                Japan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag3.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                French
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag4.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                Germany
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag6.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                Bangladesh
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag5.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                South Korea
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="on-hover-item border-right-item border-right-item-sm-space has-submenu arrow-white">
-                    <a href="javascript:void(0)" class="selected-text text-white text-sm py-8">USD</a>
-                   <ul class="selectable-text-list on-hover-dropdown common-dropdown common-dropdown--sm max-h-200 scroll-sm px-0 py-8">
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag1.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                USD
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag2.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                Yen
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag3.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                Franc 
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag4.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                EURO
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag6.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                BDT
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0)" class="hover-bg-gray-100 text-gray-500 text-xs py-6 px-16 flex-align gap-8 rounded-0"> 
-                                <img src="{{url('public/asset/images/thumbs/flag5.png')}}" alt="" class="w-16 h-12 rounded-4 border border-gray-100">
-                                WON
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+            <ul class="header-top__right flex-align flex-wrap">
                 <li class="border-right-item">
-                    <a href="account.html" class="text-white text-sm py-8 flex-align gap-6"> 
-                        <span class="icon text-md d-flex"> <i class="ph ph-user-circle"></i> </span> 
-                        <span class="hover-text-decoration-underline">My Account</span>
-                     </a>
+                    @if(Auth::check())
+                        <span class="text-white text-sm">Hi, {{ Auth::user()->name }}</span> | 
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="text-white text-sm hover-underline">Logout</button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="text-white text-sm">Login</a> / 
+                        <a href="{{ route('register') }}" class="text-white text-sm">Register</a>
+                    @endif
                 </li>
             </ul>
         </div>
     </div>
 </div>
-<!-- ======================= Middle Top End ========================= -->
 
-    <!-- ======================= Middle Header Start ========================= -->
+<!-- ======================= Middle Header ========================= -->
 <header class="header-middle border-bottom border-gray-100">
     <div class="container container-lg">
         <nav class="header-inner flex-between">
-            <!-- Logo Start -->
+            <!-- Logo -->
             <div class="logo">
                 <a href="{{url('/')}}" class="link">
                     <img src="{{url('public/asset/images/logo/nglogo.png')}}" alt="Logo">
                 </a>
             </div>
-            <!-- Logo End  -->
 
-            <!-- form location Start -->
+            <!-- Search -->
             <form action="#" class="flex-align flex-wrap form-location-wrapper">
                 <div class="search-category d-flex h-48 select-border-end-0 radius-end-0 search-form d-sm-flex d-none">
                     <select class="js-example-basic-single border border-gray-200 border-end-0" name="state">
                         <option value="1" selected disabled>All Categories</option>
                         @foreach($categories as $cat)
-                        <option value="{{$cat->category_id}}">{{$cat->category_name}}</option>
+                            <option value="{{$cat->category_id}}">{{$cat->category_name}}</option>
                         @endforeach
                     </select>
-    
                     <div class="search-form__wrapper position-relative">
                         <input type="text" class="search-form__input common-input py-13 ps-16 pe-18 rounded-end-pill pe-44" placeholder="Search for a product or brand">
-                        <button type="submit" class="w-32 h-32 bg-main-600 rounded-circle flex-center text-xl text-white position-absolute top-50 translate-middle-y inset-inline-end-0 me-8"><i class="ph ph-magnifying-glass"></i></button>
-                    </div>
-                </div>
-
-                <div class="location-box bg-white flex-align gap-8 py-6 px-16 rounded-pill border border-gray-100">
-                    <span class="text-gray-900 text-xl d-xs-flex d-none"><i class="ph ph-map-pin"></i></span>
-                    <div class="line-height-1">
-                        <span class="text-gray-600 text-xs">Your Location</span>
-                        <div class="line-height-1">
-                            <select class="js-example-basic-single border border-gray-200 border-end-0" name="state">
-                                <option value="1">Alabama</option>
-                                <option value="1">Alaska</option>
-                                <option value="1">Arizona</option>
-                                <option value="1">Delaware</option>
-                                <option value="1">Florida</option>
-                                <option value="1">Georgia</option>
-                                <option value="1">Hawaii</option>
-                                <option value="1">Indiana</option>
-                                <option value="1">Marzland</option>
-                                <option value="1">Nevada</option>
-                                <option value="1">New Jersey</option>
-                                <option value="1">New Mexico</option>
-                                <option value="1">New York</option>
-                            </select>
-                        </div>
+                        <button type="submit" class="w-32 h-32 bg-main-600 rounded-circle flex-center text-xl text-white position-absolute top-50 translate-middle-y inset-inline-end-0 me-8">
+                            <i class="ph ph-magnifying-glass"></i>
+                        </button>
                     </div>
                 </div>
             </form>
-            <!-- form location start -->
-             
-            <!-- Header Middle Right start -->
+
+            <!-- Header Right -->
             <div class="header-right flex-align d-lg-block d-none">
                 <div class="flex-align flex-wrap gap-12">
-    <button type="button" class="search-icon flex-align d-lg-none d-flex gap-4 item-hover">
-        <span class="text-2xl text-gray-700 d-flex position-relative item-hover__text">
-            <i class="ph ph-magnifying-glass"></i>
-        </span>
-    </button>
-    <!-- <a href="cart.html" class="flex-align gap-4 item-hover">
-        <span class="text-2xl text-gray-700 d-flex position-relative me-6 mt-6 item-hover__text">
-            <i class="ph ph-heart"></i>
-            <span class="w-16 h-16 flex-center rounded-circle bg-main-600 text-white text-xs position-absolute top-n6 end-n4">2</span>
-        </span>
-        <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Wishlist</span>
-    </a> -->
-    <a href="{{ route('cart.index') }}" class="flex-align gap-4 item-hover">
-        <span class="text-2xl text-gray-700 d-flex position-relative me-6 mt-6 item-hover__text">
-            <i class="ph ph-shopping-cart-simple"></i>
-            <span class="w-16 h-16 flex-center rounded-circle bg-main-600 text-white text-xs position-absolute top-n6 end-n4">{{ $cartCount }}</span>
-        </span>
-        <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Cart</span>
-    </a>
-</div>
+                    <!-- Cart -->
+                    <a href="{{ route('cart.index') }}" class="flex-align gap-4 item-hover">
+                        <span class="text-2xl text-gray-700 d-flex position-relative me-6 mt-6 item-hover__text">
+                            <i class="ph ph-shopping-cart-simple"></i>
+                            <span id="cart-count" class="w-16 h-16 flex-center rounded-circle bg-main-600 text-white text-xs position-absolute top-n6 end-n4">
+                                {{ $cartCount }}
+                            </span>
+                        </span>
+                        <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Cart</span>
+                    </a>
+                </div>
             </div>
-            <!-- Header Middle Right End  -->
         </nav>
     </div>
 </header>
-<!-- ======================= Middle Header End ========================= -->
 
-    <!-- ==================== Header Start Here ==================== -->
+<!-- ======================= Bottom Nav ========================= -->
 <header class="header bg-white border-bottom border-gray-100">
     <div class="container container-lg">
         <nav class="header-inner d-flex justify-content-between gap-8">
             <div class="flex-align menu-category-wrapper">
-
-                
-                <!-- Category Dropdown End  -->
-    
-                <!-- Menu Start  -->
                 <div class="header-menu d-lg-block d-none">
-                    <!-- Nav Menu Start -->
-<ul class="nav-menu flex-align ">
-    <li class="on-hover-item nav-menu__item  activePage">
-        <a href="{{url('/')}}" class="nav-menu__link">Home</a>
-        
-    </li>
-    <li class="on-hover-item nav-menu__item ">
-        <a href="javascript:void(0)" class="nav-menu__link">Shop</a>
-         
-    </li>
-    <li class="on-hover-item nav-menu__item ">
-        <a href="{{url('/about')}}" class="nav-menu__link">About Us</a>
-         
-    </li>
-    <li class="nav-menu__item">
-        <a href="{{url('/contact')}}" class="nav-menu__link">Contact Us</a>
-    </li>
-</ul>
-<!-- Nav Menu End -->
+                    <ul class="nav-menu flex-align">
+                        <li class="nav-menu__item activePage"><a href="{{url('/')}}" class="nav-menu__link">Home</a></li>
+                        <li class="nav-menu__item"><a href="javascript:void(0)" class="nav-menu__link">Shop</a></li>
+                        <li class="nav-menu__item"><a href="{{url('/about')}}" class="nav-menu__link">About Us</a></li>
+                        <li class="nav-menu__item"><a href="{{url('/contact')}}" class="nav-menu__link">Contact Us</a></li>
+                    </ul>
                 </div>
-                <!-- Menu End  -->
             </div>
-
-            <!-- Header Right start -->
             <div class="header-right flex-align">
-                <!-- <a href="tel:01234567890" class="bg-main-600 text-white p-12 h-100 hover-bg-main-800 flex-align gap-8 text-lg d-lg-flex d-none"> 
-                    <div class="d-flex text-32"><i class="ph ph-phone-call"></i></div>
-                    01- 234 567 890
-                </a> -->
-                <!-- Category Dropdown Start -->
-                <div class="category on-hover-item">
-                    <button type="button" class="category__button flex-align gap-8 fw-medium p-16 border-end border-start border-gray-100 text-heading">
-                        <span class="icon text-2xl d-xs-flex d-none"><i class="ph ph-dots-nine"></i></span>
-                        <span class="d-sm-flex d-none">All</span>  Categories
-                        <span class="arrow-icon text-xl d-flex"><i class="ph ph-caret-down"></i></span>
-                    </button>
-
-                    <div class="responsive-dropdown on-hover-dropdown common-dropdown nav-submenu p-0 submenus-submenu-wrapper">
-
-                        <button type="button" class="close-responsive-dropdown rounded-circle text-xl position-absolute inset-inline-end-0 inset-block-start-0 mt-4 me-8 d-lg-none d-flex"> <i class="ph ph-x"></i> </button>
-
-                        <!-- Logo Start -->
-                        <div class="logo px-16 d-lg-none d-block">
-                            <a href="index.html" class="link">
-                                <img src="{{url('public/asset/images/logo/nglogo.png')}}" alt="Logo">
-                            </a>
-                        </div>
-                        <!-- Logo End -->
-
-                        <ul class="scroll-sm p-0 py-8 w-300 max-h-400 overflow-y-auto">
-                        @foreach($categories as $cat)
-                            <li class="has-submenus-submenu">
-                                <a href="javascript:void(0)" class="text-gray-500 text-15 py-12 px-16 flex-align gap-8 rounded-0">
-                                    <span class="text-xl d-flex"><i class="ph ph-carrot"></i></span>
-                                    <span>{{$cat->category_name}}</span>
-                                    <span class="icon text-md d-flex ms-auto"><i class="ph ph-caret-right"></i></span>
-                                </a>
-    
-                                <div class="submenus-submenu py-16">
-                                    <h6 class="text-lg px-16 submenus-submenu__title">{{$cat->category_name}}</h6>
-                                    <ul class="submenus-submenu__list max-h-300 overflow-y-auto scroll-sm">
-                                    @foreach($subcategories as $subcat)
-                                    @if($subcat->category_id == $cat->id)
-                                        <li>
-                                            <a href="shop.html">{{$subcat->subcategory_name}}</a>
-                                        </li>
-                                    @endif
-                                    @endforeach
-                                        
-                                </ul>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div> 
-                <div class="me-16 d-lg-none d-block">
-                    <div class="flex-align flex-wrap gap-12">
-    <button type="button" class="search-icon flex-align d-lg-none d-flex gap-4 item-hover">
-        <span class="text-2xl text-gray-700 d-flex position-relative item-hover__text">
-            <i class="ph ph-magnifying-glass"></i>
-        </span>
-    </button>
-    <a href="cart.html" class="flex-align gap-4 item-hover">
-        <span class="text-2xl text-gray-700 d-flex position-relative me-6 mt-6 item-hover__text">
-            <i class="ph ph-heart"></i>
-            <span class="w-16 h-16 flex-center rounded-circle bg-main-600 text-white text-xs position-absolute top-n6 end-n4">2</span>
-        </span>
-        <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Wishlist</span>
-    </a>
-    <a href="cart.html" class="flex-align gap-4 item-hover">
-        <span class="text-2xl text-gray-700 d-flex position-relative me-6 mt-6 item-hover__text">
-            <i class="ph ph-shopping-cart-simple"></i>
-            <span class="w-16 h-16 flex-center rounded-circle bg-main-600 text-white text-xs position-absolute top-n6 end-n4">2</span>
-        </span>
-        <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Cart</span>
-    </a>
-</div>
-                </div>
-                <button type="button" class="toggle-mobileMenu d-lg-none ms-3n text-gray-800 text-4xl d-flex"> <i class="ph ph-list"></i> </button>
+                <button type="button" class="toggle-mobileMenu d-lg-none ms-3n text-gray-800 text-4xl d-flex"> 
+                    <i class="ph ph-list"></i> 
+                </button>
             </div>
-            <!-- Header Right End  -->
         </nav>
     </div>
 </header>
-<!-- ==================== Header End Here ==================== -->
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function updateCartCount() {
+        $.get("{{ route('cart.count') }}", function (data) {
+            $('#cart-count').text(data.count);
+        });
+    }
+
+    function addToCart(productId) {
+        $.ajax({
+            url: "/cart/add/" + productId, // ✅ Fix: include productId in URL
+            method: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                quantity: 1
+            },
+            success: function (response) {
+                updateCartCount();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Added!',
+                    text: response.message ?? 'Item added to cart',
+                    toast: true,
+                    position: 'top-end',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        updateCartCount();
+    });
+</script>
