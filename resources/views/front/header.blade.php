@@ -7,6 +7,107 @@ $cartCount = Cart::getContent()->count();
     .preloader img{
         width: 10% !important;
     }
+
+    /* Overlay */
+/* Overlay */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Modal Box */
+.popup-box {
+  background: #fff;
+  width: 400px;
+  max-width: 90%;
+  padding: 25px;
+  border-radius: 10px;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Close */
+.popup-close {
+  position: absolute;
+  top: 12px; right: 15px;
+  font-size: 22px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Tabs */
+.popup-tabs {
+  display: flex;
+  margin-bottom: 15px;
+}
+.popup-tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background: none;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+  color: #555;
+}
+.popup-tab.active {
+  color: #e63946;
+  border-color: #e63946;
+}
+
+/* Forms */
+.popup-content { display: none; }
+.popup-content.active { display: block; }
+label {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 14px;
+}
+input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.popup-submit {
+  width: 100%;
+  padding: 10px;
+  background: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.popup-submit:hover {
+  background: #d62839;
+}
+
+/* Trigger Btn */
+.auth-btn {
+  padding: 8px 15px;
+  background: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.auth-btn:hover {
+  background: #d62839;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+
 </style>    
 
 <!--==================== Preloader Start ====================-->
@@ -78,8 +179,7 @@ $cartCount = Cart::getContent()->count();
                             <button type="submit" class="text-white text-sm hover-underline">Logout</button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="text-white text-sm">Login</a> / 
-                        <a href="{{ route('register') }}" class="text-white text-sm">Register</a>
+                        <button id="headerAuthBtn" class="auth-btn">Login / Register</button>
                     @endif
                 </li>
             </ul>
@@ -157,8 +257,95 @@ $cartCount = Cart::getContent()->count();
         </nav>
     </div>
 </header>
+<!-- Authentication Modal -->
+
+<div id="headerAuthModal" class="popup-overlay">
+    <div class="popup-box">
+        <span class="popup-close" id="headerAuthClose">&times;</span>
+
+        <!-- Tabs -->
+        <div class="popup-tabs">
+            <button class="popup-tab active" data-tab="header-login">Login</button>
+            <button class="popup-tab" data-tab="header-register">Register</button>
+        </div>
+
+        <!-- Login -->
+        <div id="header-login" class="popup-content active">
+            <h2>Login</h2>
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <label>Email</label>
+                <input type="email" name="email" required>
+                
+                <label>Password</label>
+                <input type="password" name="password" required>
+                
+                <button type="submit" class="popup-submit">Login</button>
+            </form>
+        </div>
+
+        <!-- Register -->
+        <div id="header-register" class="popup-content">
+            <h2>Register</h2>
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <label>Name</label>
+                <input type="text" name="name" required>
+
+                <label>Email</label>
+                <input type="email" name="email" required>
+
+                <label>Password</label>
+                <input type="password" name="password" required>
+
+                <label>Confirm Password</label>
+                <input type="password" name="password_confirmation" required>
+
+                <button type="submit" class="popup-submit">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- Scripts -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("headerAuthModal");
+    const openBtn = document.getElementById("headerAuthBtn");
+    const closeBtn = document.getElementById("headerAuthClose");
+    const tabBtns = modal.querySelectorAll(".popup-tab");
+    const tabContents = modal.querySelectorAll(".popup-content");
+
+    // Open
+    openBtn.addEventListener("click", () => {
+        modal.style.display = "flex";
+        tabBtns[0].click(); // default to login
+    });
+
+    // Close
+    closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+    window.addEventListener("click", e => {
+        if (e.target === modal) modal.style.display = "none";
+    });
+
+    // Tabs
+    tabBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            tabBtns.forEach(b => b.classList.remove("active"));
+            tabContents.forEach(c => c.classList.remove("active"));
+            btn.classList.add("active");
+            modal.querySelector("#" + btn.dataset.tab).classList.add("active");
+        });
+    });
+});
+</script>
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

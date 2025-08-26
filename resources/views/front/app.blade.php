@@ -36,6 +36,7 @@
 
 @include('front.header')
 
+
 @yield('frontcontent')
 
 @include('front.footer')
