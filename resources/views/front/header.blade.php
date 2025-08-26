@@ -1,7 +1,11 @@
 <?php 
 use Illuminate\Support\Facades\Auth;
-$cartCount = Cart::getContent()->count();
-?>
+$cart = auth()->check()
+        ? Cart::session(auth()->id())->getContent()
+        : Cart::session(session()->getId())->getContent();
+
+    $cartCount = $cart->count();
+    ?>
 
 <style>
     .preloader img{
