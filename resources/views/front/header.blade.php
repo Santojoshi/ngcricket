@@ -108,7 +108,7 @@ $cart = auth()->check()
     /* Trigger Btn */
     .auth-btn {
         padding: 8px 15px;
-        background: #e63946;
+        background: transparent;
         color: #fff;
         border: none;
         border-radius: 6px;
@@ -247,7 +247,7 @@ $cart = auth()->check()
             </form>
 
             <!-- Header Right -->
-            <div class="header-right flex-align d-lg-block d-none">
+            <!-- <div class="header-right flex-align d-lg-block d-none">
                 <div class="flex-align flex-wrap gap-12">
                  
                     <a href="{{ route('cart.index') }}" class="flex-align gap-4 item-hover">
@@ -260,7 +260,7 @@ $cart = auth()->check()
                         <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Cart</span>
                     </a>
                 </div>
-            </div>
+            </div> -->
             <div class="header-right flex-align">
                 <!-- <a href="tel:01234567890" class="bg-main-600 text-white p-12 h-100 hover-bg-main-800 flex-align gap-8 text-lg d-lg-flex d-none"> 
                     <div class="d-flex text-32"><i class="ph ph-phone-call"></i></div>
@@ -339,6 +339,20 @@ $cart = auth()->check()
                 </div>
                 <button type="button" class="toggle-mobileMenu d-lg-none ms-3n text-gray-800 text-4xl d-flex"> <i
                         class="ph ph-list"></i> </button>
+            </div>
+             <div class="header-right flex-align d-lg-block d-none">
+                <div class="flex-align flex-wrap gap-12">
+                 
+                    <a href="{{ route('cart.index') }}" class="flex-align gap-4 item-hover">
+                        <span class="text-2xl text-gray-700 d-flex position-relative me-6 mt-6 item-hover__text">
+                            <i class="ph ph-shopping-cart-simple"></i>
+                            <span id="cart-count" class="w-16 h-16 flex-center rounded-circle bg-main-600 text-white text-xs position-absolute top-n6 end-n4">
+                                {{ $cartCount }}
+                            </span>
+                        </span>
+                        <span class="text-md text-gray-500 item-hover__text d-none d-lg-flex">Cart</span>
+                    </a>
+                </div>
             </div>
         </nav>
     </div>

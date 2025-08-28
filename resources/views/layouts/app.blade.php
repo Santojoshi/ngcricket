@@ -27,12 +27,7 @@
   </style>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{{ url('/') }}">My Store</a>
-    <a class="btn btn-outline-light" href="{{ route('cart.index') }}">Cart</a>
-  </div>
-</nav>
+
 @include('front.header')
 <main class="py-4">
   @yield('content')
