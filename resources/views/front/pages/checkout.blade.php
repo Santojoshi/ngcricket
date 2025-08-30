@@ -2,7 +2,7 @@
 
 @section('frontcontent')
 <div class="container">
-  <h3 class="mb-3">Checkout</h3>
+  <h5 class="mt-30 mb-4`  0 p-10 bg-gray-100">Checkout</h5>
 
   @if(session('error'))   <div class="alert alert-danger">{{ session('error') }}</div> @endif
   @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif

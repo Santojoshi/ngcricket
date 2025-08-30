@@ -109,7 +109,7 @@ $cart = auth()->check()
     .auth-btn {
         padding: 8px 15px;
         background: transparent;
-        color: #fff;
+        color: #000;
         border: none;
         border-radius: 6px;
         cursor: pointer;
@@ -188,22 +188,22 @@ $cart = auth()->check()
 </div>
 
 <!-- ======================= Top Header ========================= -->
-<div class="header-top bg-main-600 flex-between">
+<div class="header-top bg-gray-100 flex-between py-10">
     <div class="container container-lg">
         <div class="flex-between flex-wrap gap-8">
             <ul class="flex-align flex-wrap d-none d-md-flex">
                 <li class="border-right-item"><a href="{{url('/about')}}"
-                        class="text-white text-sm hover-text-decoration-underline">About us</a></li>
+                        class="text-black text-sm hover-text-decoration-underline">About us</a></li>
                 <li class="border-right-item"><a href="#"
-                        class="text-white text-sm hover-text-decoration-underline">Returns Policy</a></li>
+                        class="text-black text-sm hover-text-decoration-underline">Returns Policy</a></li>
             </ul>
             <ul class="header-top__right flex-align flex-wrap">
                 <li class="border-right-item">
                     @if(Auth::check())
-                    <span class="text-white text-sm">Hi, {{ Auth::user()->name }}</span> |
+                    <span class="text-black text-sm">Hi, {{ Auth::user()->name }}</span> |
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit" class="text-white text-sm hover-underline">Logout</button>
+                        <button type="submit" class="text-black text-sm hover-underline">Logout</button>
                     </form>
                     @else
                     <button id="headerAuthBtn" class="auth-btn">Login / Register</button>

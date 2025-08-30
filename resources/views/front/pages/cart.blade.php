@@ -51,7 +51,7 @@
     }
 </style>
 <div class="container py-8">
-  <h4 class="my-30 fw-semibold">🛒 Your Cart</h4>
+  <h5 class="mt-30 mb-60 p-10 fw-semibold your_cart bg-gray-100">🛒 Your Cart</h5>
 
   @if(session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif
   @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
@@ -80,7 +80,7 @@
 
             <div class="qty-box mt-5">
               <button type="button" class="qty-btn" data-delta="-1">−</button>
-              <input type="number" class="qty-input cart_qty pt-8" value="{{ $item->quantity }}" min="1">
+              <input type="number" class="qty-input cart_qty pt-12" value="{{ $item->quantity }}" min="1">
               <button type="button" class="qty-btn" data-delta="1">+</button>
             </div>
 

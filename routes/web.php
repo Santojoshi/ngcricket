@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -98,5 +99,12 @@ Route::post('/admin/add_banner', [AdminController::class, 'save_banner']);
 Route::get('/admin/edit_banner/{id}', [AdminController::class, 'edit_banner']);
 Route::post('/admin/edit_banner/{id}', [AdminController::class, 'update_banner']);
 Route::get('/admin/delete_banner/{id}', [AdminController::class, 'delete_banner']);
+
+
+
+    Route::get('admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::post('admin/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+
 
 });
