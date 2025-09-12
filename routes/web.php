@@ -63,6 +63,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 
+// user
+Route::post('/order/store', [OrderController::class,'store'])->name('order.store');
 
 // Admin Dashboard********************************************************
 route::group(['middleware' => 'admin'], function(){
@@ -102,9 +104,9 @@ Route::get('/admin/delete_banner/{id}', [AdminController::class, 'delete_banner'
 
 
 
-    Route::get('admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('admin/orders/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
-    Route::post('admin/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+Route::get('/admin/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/admin/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+Route::post('/admin/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
 
 });

@@ -9,21 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up()
+  public function up(): void
 {
     Schema::create('orders', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-
+        $table->unsignedBigInteger('user_id')->nullable();
+        
         // Shipping
         $table->string('ship_name');
         $table->string('ship_phone');
         $table->string('ship_address1');
         $table->string('ship_address2')->nullable();
         $table->string('ship_city');
-        $table->string('ship_state')->nullable();
-        $table->string('ship_postcode')->nullable();
-        $table->string('ship_country')->default('IN');
+        $table->string('ship_state');
+        $table->string('ship_postcode');
+        $table->string('ship_country');
 
         // Billing
         $table->boolean('billing_same_as_shipping')->default(true);
@@ -36,16 +36,20 @@ return new class extends Migration
         $table->string('bill_postcode')->nullable();
         $table->string('bill_country')->nullable();
 
-        // Totals
-        $table->decimal('subtotal', 10, 2);
+        // Order totals
+        $table->decimal('subtotal', 10, 2)->default(0);
         $table->decimal('shipping_fee', 10, 2)->default(0);
         $table->decimal('discount', 10, 2)->default(0);
-        $table->decimal('total', 10, 2);
+        $table->decimal('total', 10, 2)->default(0);
 
-        // Status
-        $table->string('payment_method')->default('cod');    // cod|online
-        $table->string('payment_status')->default('pending');// pending|paid|failed
-        $table->string('status')->default('pending');        // pending|processing|completed|canceled
+        // Payment
+        $table->string('payment_method')->nullable();
+        $table->string('payment_status')->default('pending');
+
+        // Order Status
+        $table->enum('status', [
+            'pending','accepted','packed','shipped','delivered','cancelled'
+        ])->default('pending');
 
         $table->timestamps();
     });

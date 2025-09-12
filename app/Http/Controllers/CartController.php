@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 use App\Models\ProductModel;
 
-
 class CartController extends Controller
 {
+    /**
+     * Get current cart instance (for user or guest)
+     */
     private function cart()
     {
         return Auth::check()
@@ -17,13 +19,20 @@ class CartController extends Controller
             : Cart::session(session()->getId());
     }
 
+    /**
+     * Show cart page
+     */
     public function index()
     {
         $items = $this->cart()->getContent();
         $total = $this->cart()->getTotal();
-        return view('front/pages/cart', compact('items','total'));
+
+        return view('front.pages.cart', compact('items', 'total'));
     }
 
+    /**
+     * Add item to cart
+     */
     public function add(Request $request, $id)
     {
         $product = ProductModel::findOrFail($id);
@@ -32,18 +41,22 @@ class CartController extends Controller
             'id'       => $product->id,
             'name'     => $product->product_name,
             'price'    => $product->us_price_actual,
-            'quantity' => (int)($request->input('qty', 1)),
+            'quantity' => (int) $request->input('qty', 1),
             'attributes' => [
                 'image' => $product->img1,
             ],
         ]);
 
-        return back()->with('success','Added to cart');
+        return back()->with('success', 'Product added to cart!');
     }
 
+    /**
+     * Update quantity
+     */
     public function update(Request $request, $id)
     {
-        $qty = (int)$request->input('quantity', 1);
+        $qty = (int) $request->input('quantity', 1);
+
         $this->cart()->update($id, [
             'quantity' => [
                 'relative' => false,
@@ -51,28 +64,42 @@ class CartController extends Controller
             ],
         ]);
 
+        // Return fresh totals (for AJAX frontend update)
         return response()->json([
-            'ok'    => true,
-            'total' => $this->cart()->getTotal(),
+            'ok'      => true,
+            'itemQty' => $this->cart()->get($id)->quantity,
+            'itemSub' => $this->cart()->get($id)->getPriceSum(),
+            'total'   => $this->cart()->getTotal(),
         ]);
     }
 
+    /**
+     * Remove item
+     */
     public function remove($id)
     {
         $this->cart()->remove($id);
-        return back();
+
+        return back()->with('success', 'Item removed from cart.');
     }
 
+    /**
+     * Clear cart
+     */
     public function clear()
     {
         $this->cart()->clear();
-        return back();
-    }
-    public function getCartCount()
-{
-    $cartSession = auth()->check() ? auth()->id() : session()->getId();
-    $count = Cart::session($cartSession)->getTotalQuantity();
 
-    return response()->json(['count' => $count]);
-}
+        return back()->with('success', 'Cart cleared.');
+    }
+
+    /**
+     * Get cart item count (for header/cart icon)
+     */
+    public function getCartCount()
+    {
+        $count = $this->cart()->getTotalQuantity();
+
+        return response()->json(['count' => $count]);
+    }
 }
